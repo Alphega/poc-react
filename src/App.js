@@ -1,25 +1,14 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import Colors from './Style/Colors/Colors';
+import data from './Colors.json';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+    render() {
+        return data.map((k, v) => {
+            console.log(k, v);
+            return <Colors data={k,v} />
+        });
+    }
 }
 
 export default App;
