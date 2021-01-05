@@ -1,22 +1,13 @@
-// import React, { Component } from 'react';
 import Colors from './Style/Colors/Colors';
-import data from './Colors.json';
+import { colors } from './Colors.json';
 
-/*
-class App extends Component {
-    render() {
-        return data.map((k, v) => {
-            console.log(k, v);
-            return <Colors data={k,v} />
-        });
-    }
+const App = () => {
+    return (
+        <div className="App">
+            <h1>Couleurs </h1>  
+            {colors.map(data => <Colors data={data} /> )}
+        </div>
+    );
 }
 
-export default App;*/
-
-export default () => {
-    return data.map((k, v) => {
-        console.log(k, v);
-        return <Colors data={k,v} />
-    });
-}
+export default App;

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Box from '@material-ui/core/Box';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { ChromePicker } from 'react-color';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
+    display: 'inline-flex',
     flexWrap: 'wrap',
     '& > *': {
       margin: theme.spacing(1),
@@ -15,14 +15,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default () => {
+const Colors = ({ data }) => {
   const classes = useStyles();
-  const [bg, setBg] = useState('#ff1122');
+  const [bg, setBg] = useState(data.background);
   const [displayCP, setDisplayCP] = useState(false);
 
   return (
     <div className={ classes.root }>
-      <Box bgcolor={ bg } onClick={ () => setDisplayCP(!displayCP) } />
+      <Box bgcolor={bg} onClick={ () => setDisplayCP(!displayCP) }>
+        {<h6>{data.title}</h6>}
+      </Box>
       { displayCP && (
         <ChromePicker
           color={ bg }
@@ -33,3 +35,5 @@ export default () => {
   </div>
   );
 }
+
+export default Colors;
