@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import Box from '@material-ui/core/Box';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import { ChromePicker } from 'react-color';
 
-const styles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -15,41 +15,21 @@ const styles = makeStyles((theme) => ({
   },
 }));
 
-class Colors extends Component {
-  constructor(props) {
-    super(props);
-    
+export default () => {
+  const classes = useStyles();
+  const [bg, setBg] = useState('#ff1122');
+  const [displayCP, setDisplayCP] = useState(false);
 
-    this.state = {
-      displayColorPicker: false,
-      defaultColor: props.background,
-      background: props.background,
-      title: props.title
-    }
-  }
+  return (
+    <div className={ classes.root }>
+      <Box bgcolor={ bg } onClick={ () => setDisplayCP(!displayCP) } />
+      { displayCP && (
+        <ChromePicker
+          color={ bg }
+          onChange={ ({ hex }) => setBg(hex) }
+        />
+      )}
 
-  onHandleShowColorPicker() {
-    this.setState(state => ({ displayColorPicker: !state.displayColorPicker }));
-  }
-
-  handleChange(color) {
-    this.setState({ background: color.hex });
-  }
-
-  render() {
-    const { classes } = this.props;
-    console.log('classes', classes);
-    return (
-      <div className={classes.root}>
-        <Box bgcolor={this.state.background} onClick={this.onHandleShowColorPicker.bind(this)} /> 
-        {this.state.displayColorPicker && <ChromePicker
-          color={ this.state.background }
-          onChange={ this.handleChange.bind(this) }
-        />}
-       
-      </div>
-    );
-  }
+  </div>
+  );
 }
-
-export default withStyles(styles)(Colors);
