@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import { ChromePicker } from 'react-color';
+import useTokenApi from '../../api/TokenAPI';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,25 +16,44 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Colors = ({ data }) => {
-  const classes = useStyles();
-  const [bg, setBg] = useState(data.background);
-  const [displayCP, setDisplayCP] = useState(false);
+function useColorPicker(initial) {
+  const [togglePicker, setTogglePicker] = useState(initial);
+  const [setSingleToken, setTokens, close] = useTokenApi();
 
-  return (
-    <div className={ classes.root }>
-      <Box bgcolor={bg} onClick={ () => setDisplayCP(!displayCP) }>
-        {<h6>{data.title}</h6>}
-      </Box>
-      { displayCP && (
-        <ChromePicker
-          color={ bg }
-          onChange={ ({ hex }) => setBg(hex) }
-        />
-      )}
+  function onPickerChange(bg) {
+      setTogglePicker(!togglePicker);
 
-  </div>
-  );
+      // send request through API on closing color picker
+      if (togglePicker) {
+        console.log('[APP] send to API');
+        setSingleToken(bg);
+      }
+  }
+
+  return [togglePicker, setTogglePicker, onPickerChange];
 }
 
-export default Colors;
+export default function Colors({ data }) {
+    const classes = useStyles();
+    const [bg, setBg] = useState(data.background);
+    const [togglePicker, setTogglePicker, onPickerChange] = useColorPicker(false);
+
+    function handleColorChange({ hex }) {
+      setBg(hex);
+      console.warn('×', hex);
+    }
+
+    return (
+      <div className={ classes.root }>
+        <Box bgcolor={bg} onClick={ () => onPickerChange({ key: data.title, value: bg }) }>
+          {<h6>{data.title}</h6>}
+        </Box>
+        { togglePicker && (
+          <ChromePicker
+           color={ bg }
+           onChange={ ({ hex }) => setBg(hex) }
+          />
+        )}
+      </div>
+    );
+};
