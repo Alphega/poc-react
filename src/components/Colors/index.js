@@ -17,7 +17,7 @@ export default function AllColors() {
     }, []);
 
     return (
-        <div className="App">
+        <div className="AllColors">
             <h1>Couleurs </h1>
             {colors.map(data => <Colors data={data} /> )}
         </div>

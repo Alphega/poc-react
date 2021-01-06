@@ -20,14 +20,16 @@ function useColorPicker(initial) {
   const [togglePicker, setTogglePicker] = useState(initial);
   const [setSingleToken, setTokens, close] = useTokenApi();
 
-  function onPickerChange(bg) {
+  function onPickerChange(tile) {
+    if (!tile.disabled) {
       setTogglePicker(!togglePicker);
 
       // send request through API on closing color picker
       if (togglePicker) {
         console.log('[APP] send to API');
-        setSingleToken(bg);
+        setSingleToken(tile);
       }
+    }
   }
 
   return [togglePicker, setTogglePicker, onPickerChange];
@@ -45,7 +47,7 @@ export default function Colors({ data }) {
 
     return (
       <div className={ classes.root }>
-        <Box bgcolor={bg} onClick={ () => onPickerChange({ key: data.title, value: bg }) }>
+        <Box bgcolor={bg} onClick={  () => onPickerChange({ key: data.title, value: bg, disabled: data.disabled }) }>
           {<h6>{data.title}</h6>}
         </Box>
         { togglePicker && (
