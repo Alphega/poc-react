@@ -1,28 +1,39 @@
-import { useState, useEffect } from 'react';
-import Colors from './Style/Colors/Colors';
-import useThemeMap from './api/ThemeMapperAPI';
-
+import React, { useState, useRef } from 'react';
+import { ThemeProvider } from 'styled-components';
+import { useOnClickOutside } from './hooks';
+import { GlobalStyles } from './global';
+import { theme } from './theme';
+import { Burger, Menu, Colors, Theme, Welcome } from './components';
+import FocusLock from 'react-focus-lock';
+import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 
 export default function App() {
-    const [colors, setcolors] = useState([1]);
-    const [getThemes] = useThemeMap();
+    const [open, setOpen] = useState(false);
+    const node = useRef();
+    const menuId = "main-menu";
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const t1 = (await getThemes())[0].style.colors;
-            const colorMap = Object.keys(t1).map(entry => ({ title: entry, background: t1[entry] }));
-            setcolors(colorMap);
-        };
+    useOnClickOutside(node, () => setOpen(false));
 
-        fetchData();
-    }, []);
-
-
-    console.warn('×', colors);
     return (
-        <div className="App">
-            <h1>Couleurs </h1>
-            {colors.map(data => <Colors data={data} /> )}
-        </div>
+        <ThemeProvider theme={theme}>
+            <>
+                <React.Fragment>
+                    <Router>
+                        <Switch>
+                            <Route exact path="/" component={Welcome} />
+                            <Route path="/theme" component={Theme} />
+                            <Route path="/colors" component={Colors} />
+                        </Switch>
+                    </Router>
+                </React.Fragment>
+                <GlobalStyles />
+                <div ref={node}>
+                    <FocusLock disabled={!open}>
+                        <Burger open={open} setOpen={setOpen} aria-controls={menuId} />
+                        <Menu open={open} setOpen={setOpen} id={menuId} />
+                    </FocusLock>
+                </div>
+            </>
+        </ThemeProvider>
     );
 };
