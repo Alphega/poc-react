@@ -11,7 +11,7 @@ const Theme = () => {
   const [currentCustomer, setCurrentCustomer] = useState();
 
   const [themes, setThemes] = useState([1]);
-  const { getThemes, updateCustomerTheme }= useThemeMap();
+  const { getThemes, updateCustomerTheme } = useThemeMap();
 
     const { getCustomers } = useCustomerApi();
     useEffect(() => {
@@ -48,10 +48,7 @@ const Theme = () => {
             }}
         >
             <option aria-label="None" value="" />
-            {customers.map((customer) => (
-                <option value={customer.cpe}>{customer.cpe}</option>
-                ))
-            }
+            {customers.map(customer => <option value={customer.cpe}>{customer.cpe}</option>)}
         </Select>
         {themes.map((theme) => {
             const tcolors = theme && theme.style && theme.style;
