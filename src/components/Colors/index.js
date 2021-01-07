@@ -11,7 +11,7 @@ const colorMapRef = [
 
 export default function AllColors() {
     const [colors, setcolors] = useState([1]);
-    const [getThemes] = useThemeMap();
+    const { getThemes } = useThemeMap();
 
     useEffect(() => {
         const fetchData = async () => {
