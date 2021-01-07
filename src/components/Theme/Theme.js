@@ -10,7 +10,7 @@ const Theme = () => {
   const [customers, setCustomers] = useState([]);
   const [currentCustomer, setCurrentCustomer] = useState();
 
-  const [themes, setThemes] = useState([1]);
+  const [themes, setThemes] = useState([]);
   const { getThemes, updateCustomerTheme } = useThemeMap();
 
     const { getCustomers } = useCustomerApi();

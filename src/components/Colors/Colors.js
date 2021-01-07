@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import { ChromePicker } from 'react-color';
@@ -40,6 +40,10 @@ export default function Colors({ data }) {
     const [bg, setBg] = useState(data.background);
     const [togglePicker, onPickerChange] = useColorPicker(false);
 
+    useEffect(() => {
+        setBg(data.background);
+    }, [data]);
+
     return (
       <div className={ classes.root }>
         <Box bgcolor={bg} onClick={
@@ -50,7 +54,6 @@ export default function Colors({ data }) {
                 themeId: data.themeId
             }) }>
           <h6>{data.title}</h6>
-          <h6>[ theme "{data.themeId}" ]</h6>
         </Box>
         { togglePicker && (
           <ChromePicker
