@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 
 function useColorPicker(initial) {
   const [togglePicker, setTogglePicker] = useState(initial);
-  const [setSingleToken, setTokens, close] = useTokenApi();
+  const { setSingleToken } = useTokenApi();
 
   function onPickerChange(tile) {
     if (!tile.disabled) {
@@ -32,23 +32,25 @@ function useColorPicker(initial) {
     }
   }
 
-  return [togglePicker, setTogglePicker, onPickerChange];
+  return [togglePicker, onPickerChange];
 }
 
 export default function Colors({ data }) {
     const classes = useStyles();
     const [bg, setBg] = useState(data.background);
-    const [togglePicker, setTogglePicker, onPickerChange] = useColorPicker(false);
-
-    function handleColorChange({ hex }) {
-      setBg(hex);
-      console.warn('×', hex);
-    }
+    const [togglePicker, onPickerChange] = useColorPicker(false);
 
     return (
       <div className={ classes.root }>
-        <Box bgcolor={bg} onClick={  () => onPickerChange({ key: data.title, value: bg, disabled: data.disabled }) }>
-          {<h6>{data.title}</h6>}
+        <Box bgcolor={bg} onClick={
+            () => onPickerChange({
+                key: data.title,
+                value: bg,
+                disabled: data.disabled,
+                themeId: data.themeId
+            }) }>
+          <h6>{data.title}</h6>
+          <h6>[ theme "{data.themeId}" ]</h6>
         </Box>
         { togglePicker && (
           <ChromePicker
