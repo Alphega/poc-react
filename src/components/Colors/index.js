@@ -12,13 +12,16 @@ const colorMapRef = [
 
 export default function AllColors() {
     const [colors, setcolors] = useState([]);
+    const [tList, setTList] = useState([]);
     const [currentTheme, setCurrentTheme] = useState('T1');
 
     const { getThemes } = useThemeMap();
 
     useEffect(() => {
         const fetchData = async () => {
-            const tRaw = (await getThemes()).find(t => t.id === currentTheme).style;
+            const tListRaw = await getThemes();
+            setTList(tListRaw.map(t => t.id));
+            const tRaw = tListRaw.find(t => t.id === currentTheme).style;
             const colorMap = [];
             Object.keys(tRaw).forEach((token) => {
                 if (colorMapRef.includes(token)) {
@@ -43,12 +46,13 @@ export default function AllColors() {
                     id: 'age-native-simple',
                 }}
             >
-                <option value={'T1'}>Theme 1</option>
-                <option value={'T2'}>Theme 2</option>
+                {tList && tList.map(t => <option value={t}>Theme {t}</option>)}
             </Select>
 
             <h1>Couleurs </h1>
-            {colors.map(data => <Colors data={data} /> )}
+            {colors.map(data => <div>
+                <Colors data={data} />
+            </div> )}
         </div>
     );
 };

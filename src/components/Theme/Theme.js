@@ -11,13 +11,17 @@ const Theme = () => {
   const [currentCustomer, setCurrentCustomer] = useState();
 
   const [themes, setThemes] = useState([]);
-  const { getThemes, updateCustomerTheme } = useThemeMap();
+  const { getThemes, updateCustomerTheme, registerNewTheme } = useThemeMap();
+
+    const [tList, setTList] = useState([]);
+    const [currentTheme, setCurrentTheme] = useState('T1');
 
     const { getCustomers } = useCustomerApi();
     useEffect(() => {
       const fetchData = async () => {
-          const tRaw = (await getThemes());
-          setThemes(tRaw);
+          const tListRaw = await getThemes();
+          setTList(tListRaw.map(t => t.id));
+          setThemes(tListRaw);
       };
 
       const fetchCustomers = async () => {
@@ -35,6 +39,13 @@ const Theme = () => {
             updateCustomerTheme({cpe: currentCustomer, id: t.id});
         }
   };
+
+    function duplicateTheme() {
+        const customTheme = Object.assign({}, themes.find(t => t.id === currentTheme));
+        customTheme.id = `T${tList.length+1}`;
+        setThemes(themes.concat(customTheme));
+        registerNewTheme(customTheme);
+    }
 
   return (
     <div className="Theme">
@@ -69,6 +80,20 @@ const Theme = () => {
             }
         })}
 
+        <hr />
+
+        <button onClick={() => duplicateTheme(currentTheme)}>Duplicate theme:</button>
+        <Select
+            native
+            value={currentTheme}
+            onChange={(e) => setCurrentTheme(e.target.value)}
+            inputProps={{
+                name: 'age',
+                id: 'age-native-simple',
+            }}
+        >
+            {tList && tList.map(t => <option value={t}>Theme {t}</option>)}
+        </Select>
     </div>
 );
 

@@ -13,5 +13,10 @@ export default function useThemeMap() {
         axios.post('http://localhost:1234/setCustomerTheme', { cpe, id });
     }
 
-    return { getThemes, updateCustomerTheme };
+    function registerNewTheme(customTheme) {
+        console.log('[TMAP] Updating customer theme', customTheme);
+        axios.post('http://localhost:1234/registerNewTheme', customTheme);
+    }
+
+    return { getThemes, updateCustomerTheme, registerNewTheme };
 };
