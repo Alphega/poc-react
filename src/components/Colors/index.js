@@ -8,6 +8,7 @@ const colorMapRef = [
     "$COLOR_LIGHT",
     "$COLOR_GREY_4",
     "$COLOR_GREY_5",
+    "$COLOR_GREY_6",
 ];
 
 export default function AllColors() {
